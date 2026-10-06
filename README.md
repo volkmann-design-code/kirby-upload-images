@@ -37,7 +37,8 @@ phones bring along:
 
 This plugin uses **Imagick** when the server has it: ImageMagick works
 outside PHP's `memory_limit`, so photos of any size fit, and it decodes
-HEIC if built with libheif (many hosts are). Without Imagick, it uses
+HEIC if built with libheif (many hosts are). Without Imagick, or when its
+ImageMagick lacks a format involved (some builds can't read JPEG), it uses
 Kirby's **GD** driver after checking that the image fits into the memory
 PHP has left, and refuses it with a clear message before anything is
 stored otherwise.
@@ -137,7 +138,7 @@ return [
 		'strip'   => true,
 		// metadata => file field, written before stripping
 		'fields'  => ['taken' => 'taken', 'camera' => 'camera'],
-		// null: Imagick when installed, else GD; or 'imagick', 'gd'
+		// null: Imagick when installed and its ImageMagick knows the formats, else GD; or 'imagick', 'gd'
 		'driver'  => null,
 	],
 ];

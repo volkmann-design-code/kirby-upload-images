@@ -36,7 +36,8 @@ abstract class TestCase extends BaseTestCase
 
 	protected function tearDown(): void
 	{
-		UploadImages::$memoryLeft = null;
+		UploadImages::$memoryLeft     = null;
+		UploadImages::$imagickFormats = null;
 		Dir::remove($this->root);
 	}
 
