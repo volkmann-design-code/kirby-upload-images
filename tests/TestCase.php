@@ -51,7 +51,8 @@ abstract class TestCase extends BaseTestCase
 				'cache'   => $this->root . '/cache',
 			],
 			'blueprints' => [
-				'files/photo'  => ['title' => 'Photo', 'uploadImages' => true],
+				// as the README has it: every image type, HEIC included
+				'files/photo'  => ['title' => 'Photo', 'accept' => ['type' => 'image'], 'uploadImages' => true],
 				'files/custom' => ['title' => 'Custom', 'uploadImages' => [
 					'maxSize' => 1000,
 					'fields'  => ['taken' => 'date', 'location' => 'where', 'lat' => 'lat', 'lng' => 'lng'],

@@ -1,0 +1,6 @@
+title: Photos
+sections:
+  photos:
+    type: files
+    template: photo
+    layout: cards

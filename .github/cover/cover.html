@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kirby Upload Images cover</title>
+<style>
+	/* cover.mjs puts the fonts' @font-face rules here */
+	/*{{fonts}}*/
+
+	/* the Panel's look: its gray; Inter for its system font */
+	:root {
+		--back: #e6e6e6;
+		--text: #000;
+		--dimmed: #6b6b6b;
+		--font: "Inter Variable", sans-serif;
+		--mono: "JetBrains Mono", monospace;
+	}
+	* { box-sizing: border-box; margin: 0; }
+	html, body { width: 1280px; height: 640px; overflow: hidden; }
+	body {
+		background: var(--back);
+		color: var(--text);
+		font-family: var(--font);
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: center;
+		padding: 0 64px 0 88px;
+		gap: 48px;
+	}
+	.eyebrow {
+		font-size: 20px;
+		color: var(--dimmed);
+		margin-bottom: 16px;
+	}
+	h1 {
+		font-size: 68px;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+		line-height: 1;
+		margin-bottom: 24px;
+	}
+	.lead {
+		font-size: 26px;
+		line-height: 1.3;
+		letter-spacing: -0.01em;
+		max-width: 540px;
+		margin-bottom: 28px;
+	}
+	/* the photo before and after, as the upload measured it */
+	.files {
+		font-family: var(--mono);
+		font-size: 14px;
+		line-height: 1.9;
+		margin-bottom: 28px;
+	}
+	.files div { white-space: nowrap; }
+	.files .name { display: inline-block; width: 15ch; }
+	.files .arrow { color: var(--dimmed); display: inline-block; width: 3ch; }
+	.files .from { color: var(--dimmed); }
+	code {
+		display: inline-block;
+		font-family: var(--mono);
+		font-size: 13px;
+		white-space: nowrap;
+		background: #fff;
+		border-radius: 6px;
+		padding: 11px 15px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+	}
+	code span { color: var(--dimmed); }
+	.shot img {
+		display: block;
+		/* cover.mjs sets the width: the view × its scale */
+		width: {{width}}px;
+		border-radius: 10px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 18px 40px rgba(0, 0, 0, 0.14);
+	}
+</style>
+</head>
+<body>
+	<div>
+		<p class="eyebrow">Kirby plugin</p>
+		<h1>Upload Images</h1>
+		<p class="lead">HEIC converted, big photos shrunk, capture time, camera and place kept as fields.</p>
+		<div class="files">
+			<div class="from"><span class="arrow"></span><span class="name">{{beforeName}}</span>{{beforeInfo}}</div>
+			<div><span class="arrow">→</span><span class="name">{{afterName}}</span>{{afterInfo}}</div>
+		</div>
+		<code><span>$</span> composer require volkmann-design-code/kirby-upload-images</code>
+	</div>
+	<div class="shot">
+		<!-- the real file view in the Panel -->
+		<img src="{{view}}" alt="">
+	</div>
+</body>
+</html>

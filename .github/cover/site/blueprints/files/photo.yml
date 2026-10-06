@@ -1,0 +1,31 @@
+title: Photo
+# images of every kind, HEIC included (`accept: image` would be a MIME type)
+accept:
+  type: image
+uploadImages:
+  fields:
+    taken: taken
+    camera: camera
+    location: location
+columns:
+  - width: 1/1
+    fields:
+      taken:
+        label: Taken
+        type: date
+        # to the minute, as the photo says (Kirby rounds to 5 by default)
+        time:
+          step: 1
+        step:
+          unit: minute
+          size: 1
+        width: 1/2
+      camera:
+        label: Camera
+        type: text
+        icon: image
+        width: 1/2
+      location:
+        label: Location
+        type: text
+        icon: pin

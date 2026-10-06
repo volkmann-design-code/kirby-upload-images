@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kirby Upload Images square cover</title>
+<style>
+	/* cover.mjs puts the fonts' @font-face rules here */
+	/*{{fonts}}*/
+
+	/* as cover.html */
+	:root {
+		--back: #e6e6e6;
+		--text: #000;
+		--dimmed: #6b6b6b;
+		--font: "Inter Variable", sans-serif;
+		--mono: "JetBrains Mono", monospace;
+	}
+	* { box-sizing: border-box; margin: 0; }
+	html, body { width: 640px; height: 640px; overflow: hidden; }
+	body {
+		background: var(--back);
+		color: var(--text);
+		font-family: var(--font);
+		display: grid;
+		place-content: center;
+		justify-items: start;
+	}
+	.eyebrow {
+		font-size: 18px;
+		color: var(--dimmed);
+		margin-bottom: 10px;
+	}
+	h1 {
+		font-size: 58px;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+		line-height: 1;
+		margin-bottom: 12px;
+	}
+	.files {
+		font-family: var(--mono);
+		font-size: 12px;
+		margin-bottom: 20px;
+	}
+	.files span { color: var(--dimmed); }
+	.shot img {
+		display: block;
+		width: {{width}}px;
+		border-radius: 9px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 14px 32px rgba(0, 0, 0, 0.14);
+	}
+</style>
+</head>
+<body>
+	<p class="eyebrow">Kirby plugin</p>
+	<h1>Upload Images</h1>
+	<p class="files"><span>{{beforeName}} →</span> {{afterName}} <span>· {{afterInfo}}</span></p>
+	<div class="shot">
+		<img src="{{view}}" alt="">
+	</div>
+</body>
+</html>

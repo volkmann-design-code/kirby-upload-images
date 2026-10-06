@@ -12,6 +12,8 @@ Uploaded images, made web-ready right after Kirby stores them:
   if you want it) **lands in file fields** before the metadata is
   stripped from the image.
 
+![An iPhone photo uploaded as IMG_1234.HEIC (4032 × 3024, 820 KB), in the Panel as img_1234.jpg (2560 × 1920, 415 KB) with the fields Taken (2026-08-17 07:34), Camera (Apple iPhone 14 Pro) and Location filled in](.github/cover.png)
+
 It works on Kirby's own upload, so in every files section and files
 field of the Panel, for `File::create()` and `$file->replace()`, for
 the file templates you turn it on for.
@@ -81,12 +83,14 @@ and unzip it into `site/plugins/upload-images`.
 ## Usage
 
 Turn it on in the file blueprints it should work for, and accept HEIC
-there (Kirby's `image` type includes it):
+there: Kirby's `image` *type* includes it (`accept: image` on its own
+would be a MIME type, which `image/heic` doesn't match):
 
 ```yaml
 # site/blueprints/files/photo.yml
 title: Photo
-accept: image
+accept:
+  type: image
 uploadImages: true
 fields:
   taken:
@@ -104,7 +108,8 @@ A blueprint can bring its own options:
 
 ```yaml
 # site/blueprints/files/gallery.yml
-accept: image
+accept:
+  type: image
 uploadImages:
   maxSize: 4096
   fields:
@@ -234,6 +239,18 @@ composer test
 ```
 
 Without Imagick the Imagick tests skip; CI installs it.
+The cover images `.github/cover.png` (2:1) and `.github/cover-square.png`
+(1:1) are rendered from a real Panel: the iPhone photo below, uploaded
+through this plugin, the same on every run (pinned Chromium and fonts).
+Converting HEIC takes Imagick with libheif; without it locally, the
+script runs PHP in the Docker image above (built when missing):
+
+```sh
+cd .github/cover
+npm ci && npx playwright install chromium
+npm run cover
+```
+
 `tests/fixtures/iphone.heic` is a real iPhone 14 Pro photo by Enzo
 Volkmann, published with this repository under its licence, metadata
 and location kept on purpose; the other fixtures are generated. To run them
