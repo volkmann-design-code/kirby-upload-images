@@ -18,9 +18,12 @@ jobs:
       fail-fast: false
       matrix:
         php: ["8.2", "8.3", "8.4", "8.5"]
-        # the newest 5.x and the oldest one Composer installs (older ones
-        # are blocked by security advisories)
-        kirby: [latest, lowest]
+        # the oldest 5.x Composer installs (older ones are blocked by
+        # security advisories), the newest, and Kirby 6 (needs PHP 8.3)
+        kirby: ["5.5.2", "5.6.1", "6.0.0-alpha.3"]
+        exclude:
+          - php: "8.2"
+            kirby: "6.0.0-alpha.3"
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -32,7 +35,7 @@ jobs:
       - name: Validate composer.json
         run: composer validate --no-check-version
       - name: Install dependencies
-        run: composer update --no-progress --prefer-dist ${{ matrix.kirby == 'lowest' && '--prefer-lowest --prefer-stable' || '' }}
+        run: composer require --dev --no-progress --no-interaction --prefer-dist -W "getkirby/cms:${{ matrix.kirby }}"
       - name: Versions
         run: |
           composer show getkirby/cms | grep versions

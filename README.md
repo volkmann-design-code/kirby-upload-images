@@ -1,6 +1,6 @@
 # Kirby Upload Images
 
-**Kirby 5** · PHP 8.2–8.5 · MIT
+**Kirby 5.1+ and 6** (tested with 5.5.2, 5.6.1, 6.0.0-alpha.3) · PHP 8.2–8.5 · MIT
 
 Uploaded images, made web-ready right after Kirby stores them:
 
