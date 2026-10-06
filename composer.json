@@ -3,7 +3,7 @@
     "description": "Uploaded images made web-ready: HEIC converted, big photos shrunk without running out of memory, EXIF kept as file fields",
     "license": "MIT",
     "type": "kirby-plugin",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "keywords": [
         "kirby",
         "kirby-plugin",
