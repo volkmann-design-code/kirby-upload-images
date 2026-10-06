@@ -158,4 +158,25 @@ class UploadTest extends TestCase
 			UploadImages::fields(['taken' => '2026-10-05 09:12:00', 'lat' => null], ['taken' => 'date', 'lat' => 'lat', 'camera' => 'camera']),
 		);
 	}
+
+	public function testGdWhenImageMagickCantReadTheFormat(): void
+	{
+		// e.g. a host whose ImageMagick has no JPEG delegate
+		UploadImages::$imagickFormats = fn () => ['PNG', 'HEIC'];
+
+		$this->assertSame('gd', UploadImages::driver('photo.jpg'));
+		$this->assertSame('gd', UploadImages::driver('logo.png', ['convert' => ['png' => 'jpg']]));
+		$this->assertSame('imagick', UploadImages::driver('logo.png'));
+		$this->assertSame([2560, 1920], $this->dimensions($this->upload($this->image(3200, 2400), 'big.jpg')));
+	}
+
+	public function testHeicStillNeedsImageMagick(): void
+	{
+		UploadImages::$imagickFormats = fn () => ['HEIC', 'JPEG'];
+		$this->assertSame('imagick', UploadImages::driver('IMG_0001.HEIC', UploadImages::defaults()));
+
+		UploadImages::$imagickFormats = fn () => ['JPEG'];
+		$this->expectException(InvalidArgumentException::class);
+		UploadImages::driver('IMG_0001.HEIC', UploadImages::defaults());
+	}
 }

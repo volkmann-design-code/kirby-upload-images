@@ -27,7 +27,7 @@ Kirby::plugin(
 			'strip'   => true,
 			// metadata => field: written into the file's content before stripping
 			'fields'  => ['taken' => 'taken', 'camera' => 'camera'],
-			// null: Imagick when installed, else GD; or 'imagick', 'gd'
+			// null: Imagick when installed and its ImageMagick knows the formats, else GD; or 'imagick', 'gd'
 			'driver'  => null,
 		],
 		'hooks' => [

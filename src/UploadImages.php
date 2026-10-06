@@ -37,6 +37,12 @@ class UploadImages
 	public static Closure|null $memoryLeft = null;
 
 	/**
+	 * The formats ImageMagick knows (`JPEG`, `HEIC` …), null without
+	 * Imagick; replaceable in tests.
+	 */
+	public static Closure|null $imagickFormats = null;
+
+	/**
 	 * The options for a file: the plugin's, overridden by its blueprint's
 	 * `uploadImages` (`true` or a list of options); null when it is off
 	 * for this file.
@@ -200,15 +206,19 @@ class UploadImages
 	}
 
 	/**
-	 * `imagick` or `gd`: the option, else Imagick when the server has it.
-	 * HEIC/HEIF need ImageMagick built with libheif.
+	 * `imagick` or `gd`: the option, else Imagick when the server has it
+	 * and its ImageMagick reads and writes the formats involved (not
+	 * every build has a JPEG delegate), else GD. HEIC/HEIF need
+	 * ImageMagick built with libheif.
 	 *
 	 * @throws \Kirby\Exception\InvalidArgumentException
 	 */
 	public static function driver(string $filename, array $options = []): string
 	{
-		$heic   = in_array(strtolower(F::extension($filename)), ['heic', 'heif'], true);
-		$driver = $options['driver'] ?? (static::imagick() ? 'imagick' : 'gd');
+		$extension = strtolower(F::extension($filename));
+		$heic      = in_array($extension, ['heic', 'heif'], true);
+		$target    = $options['convert'][$extension] ?? $extension;
+		$driver    = $options['driver'] ?? (static::imagickCan($extension, $target) ? 'imagick' : 'gd');
 
 		if ($heic === true && ($driver !== 'imagick' || static::imagick(heic: true) === false)) {
 			throw new InvalidArgumentException(key: 'volkmann-design-code.upload-images.heic', fallback: 'This server can\'t convert HEIC images');
@@ -219,11 +229,42 @@ class UploadImages
 
 	public static function imagick(bool $heic = false): bool
 	{
-		if (class_exists(Imagick::class) === false) {
+		return $heic === true ? static::imagickCan('heic') : static::imagickFormats() !== null;
+	}
+
+	/**
+	 * Whether ImageMagick knows all these formats, by file extension.
+	 */
+	public static function imagickCan(string ...$extensions): bool
+	{
+		$formats = static::imagickFormats();
+
+		if ($formats === null) {
 			return false;
 		}
 
-		return $heic === false || Imagick::queryFormats('HEI*') !== [];
+		foreach ($extensions as $extension) {
+			$pattern = match (strtolower($extension)) {
+				'jpg', 'jpeg'  => 'JPEG',
+				'heic', 'heif' => 'HEI*',
+				default        => strtoupper($extension),
+			};
+
+			if (array_filter($formats, fn ($format) => fnmatch($pattern, $format)) === []) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	protected static function imagickFormats(): array|null
+	{
+		if (static::$imagickFormats !== null) {
+			return (static::$imagickFormats)();
+		}
+
+		return class_exists(Imagick::class) === true ? Imagick::queryFormats() : null;
 	}
 
 	/**
