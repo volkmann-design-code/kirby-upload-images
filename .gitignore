@@ -3,6 +3,8 @@
 /vendor/
 # a library: CI resolves dependencies per Kirby and PHP version
 /composer.lock
+# development: lefthook, installed by `bun install`
+/node_modules/
 /.phpunit.cache/
 .phpunit.result.cache
 # the cover's tooling (.github/cover): npm packages, the Panel's assets

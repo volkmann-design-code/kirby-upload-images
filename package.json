@@ -1,0 +1,7 @@
+{
+  "name": "kirby-upload-images",
+  "private": true,
+  "devDependencies": {
+    "lefthook": "2.1.17"
+  }
+}
