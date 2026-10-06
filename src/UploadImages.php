@@ -227,9 +227,13 @@ class UploadImages
 		return $driver;
 	}
 
+	/**
+	 * Whether Imagick is usable: its ImageMagick reads JPEG (and HEIC
+	 * with `heic: true`), not just that the extension is installed.
+	 */
 	public static function imagick(bool $heic = false): bool
 	{
-		return $heic === true ? static::imagickCan('heic') : static::imagickFormats() !== null;
+		return static::imagickCan($heic === true ? 'heic' : 'jpg');
 	}
 
 	/**
