@@ -79,13 +79,21 @@ class Metadata
 	}
 
 	/**
-	 * ImageMagick's `exif:*` properties, named like PHP's exif.
+	 * The EXIF block ImageMagick finds (e.g. in a HEIC), read by PHP's
+	 * exif as the TIFF it is; else ImageMagick's own `exif:*` properties,
+	 * which not every build fills on a ping (Ubuntu's 6.9.12 doesn't).
 	 */
 	protected static function imagick(string $root): array
 	{
 		try {
 			$image = new Imagick();
 			$image->pingImage($root);
+			$blob = $image->getImageProfiles('exif')['exif'] ?? null;
+
+			if (is_string($blob) === true && ($tags = static::exifBlock($blob)) !== []) {
+				return $tags;
+			}
+
 			$tags = [];
 
 			foreach ($image->getImageProperties('exif:*') as $name => $value) {
@@ -103,6 +111,36 @@ class Metadata
 		} catch (Throwable) {
 			return [];
 		}
+	}
+
+	/**
+	 * An EXIF block ("Exif\0\0" and a TIFF structure) through PHP's exif.
+	 */
+	public static function exifBlock(string $blob): array
+	{
+		if (function_exists('exif_read_data') === false) {
+			return [];
+		}
+
+		$tiff = str_starts_with($blob, "Exif\0\0") ? substr($blob, 6) : $blob;
+
+		if (in_array(substr($tiff, 0, 4), ["MM\0*", "II*\0"], true) === false) {
+			return [];
+		}
+
+		$stream = fopen('php://memory', 'r+');
+		fwrite($stream, $tiff);
+		rewind($stream);
+
+		try {
+			$data = @exif_read_data($stream);
+		} catch (Throwable) {
+			$data = false;
+		} finally {
+			fclose($stream);
+		}
+
+		return is_array($data) === true ? $data : [];
 	}
 
 	/**

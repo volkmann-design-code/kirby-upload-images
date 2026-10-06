@@ -71,6 +71,20 @@ class MetadataTest extends TestCase
 		$this->assertSame([null], array_values(array_unique(array_values($meta), SORT_REGULAR)));
 	}
 
+	public function testAnExifBlockOnItsOwn(): void
+	{
+		// the APP1 segment of a JPEG: what ImageMagick hands out for a HEIC
+		$jpeg  = file_get_contents(__DIR__ . '/fixtures/photo-gps.jpg');
+		$start = strpos($jpeg, "Exif\0\0");
+		$block = substr($jpeg, $start, unpack('n', substr($jpeg, $start - 2, 2))[1] - 2);
+
+		$tags = Metadata::exifBlock($block);
+
+		$this->assertSame('2026:10:05 09:12:00', $tags['DateTimeOriginal']);
+		$this->assertSame('N', $tags['GPSLatitudeRef']);
+		$this->assertSame([], Metadata::exifBlock('not exif'));
+	}
+
 	public function testRationalsAndReferences(): void
 	{
 		$this->assertEqualsWithDelta(51.31295, Metadata::degrees(['51/1', '18/1', '4662/100'], 'N'), 0.000001);
