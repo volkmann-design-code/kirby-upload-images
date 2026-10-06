@@ -1,0 +1,61 @@
+{
+    "name": "volkmann-design-code/kirby-upload-images",
+    "description": "Uploaded images made web-ready: HEIC converted, big photos shrunk without running out of memory, EXIF kept as file fields",
+    "license": "MIT",
+    "type": "kirby-plugin",
+    "version": "0.1.0",
+    "keywords": [
+        "kirby",
+        "kirby-plugin",
+        "kirby-cms",
+        "upload",
+        "images",
+        "heic",
+        "exif",
+        "resize"
+    ],
+    "homepage": "https://github.com/volkmann-design-code/kirby-upload-images",
+    "support": {
+        "docs": "https://github.com/volkmann-design-code/kirby-upload-images/blob/main/README.md",
+        "source": "https://github.com/volkmann-design-code/kirby-upload-images",
+        "issues": "https://github.com/volkmann-design-code/kirby-upload-images/issues"
+    },
+    "authors": [
+        {
+            "name": "Enzo Volkmann",
+            "email": "enzo@volkmann.dev"
+        }
+    ],
+    "require": {
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+        "getkirby/composer-installer": "^1.2"
+    },
+    "require-dev": {
+        "getkirby/cms": "^5.1",
+        "phpunit/phpunit": "^11.5 || ^12"
+    },
+    "suggest": {
+        "ext-imagick": "HEIC/HEIF and photos of any size (ImageMagick works outside PHP's memory_limit)",
+        "ext-exif": "Reads capture time, GPS and camera from JPEG (HEIC is read through Imagick)"
+    },
+    "autoload": {
+        "psr-4": {
+            "VolkmannDesignCode\\UploadImages\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "installer-name": "upload-images",
+        "kirby": {
+            "compatible": "^5.1"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "getkirby/composer-installer": true
+        }
+    }
+}

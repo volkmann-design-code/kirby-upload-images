@@ -1,0 +1,8 @@
+# not in ZIP downloads and Composer installs
+.editorconfig export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+/.github/ export-ignore
+/tests/ export-ignore
+/phpunit.xml export-ignore
+/SECURITY.md export-ignore
