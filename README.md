@@ -236,8 +236,12 @@ are welcome as a pull request (`index.php`).
 
 ```sh
 composer install    # Kirby into kirby/, PHPUnit
+bun install         # lefthook and its Git hooks
 composer test
 ```
+
+A pre-push hook refuses a tag that doesn't match `version` in
+`composer.json` at its commit; Packagist would ignore it.
 
 Without Imagick the Imagick tests skip; CI installs it.
 The cover images `.github/cover.png` (2:1) and `.github/cover-square.png`

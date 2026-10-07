@@ -1,0 +1,7 @@
+pre-push:
+  # a script, not a command: lefthook skips commands when the push has no
+  # changed files, as a tag push hasn't
+  scripts:
+    "tag-version.sh":
+      runner: sh
+      use_stdin: true
