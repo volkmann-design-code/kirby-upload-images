@@ -9,7 +9,7 @@ while read -r ref sha _; do
 	case "$sha" in *[!0]*) ;; *) continue ;; esac
 
 	tag=${ref#refs/tags/}
-	version=$(git show "$sha:composer.json" | php -r 'echo json_decode(stream_get_contents(STDIN))->version ?? "";')
+	version=$(git show "$sha^{commit}:composer.json" | php -r 'echo json_decode(stream_get_contents(STDIN))->version ?? "";')
 
 	if [ "$tag" != "$version" ]; then
 		echo "tag $tag, but composer.json at it says \"$version\": set the version, commit, tag again"
